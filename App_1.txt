@@ -1,0 +1,29 @@
+
+pipeline{
+    agent any
+         tools{
+              maven 'maven'
+              jdk 'jdk-11'
+               }
+     stages{
+          stage('git' ){
+            steps{
+            git credentialsId:'gitlab',url:'https://git.nagarro.com/GITG00641/Java/anshu-saxena.git'
+                 }
+            }
+          stage('build'){
+            steps{
+            bat 'mvn -f  Advanced_Java_Assignment_5/App%201/pom.xml clean install'
+                 }
+            }
+
+          stage('code quality'){
+            steps{
+            withSonarQubeEnv('sonarQube'){
+            bat 'mvn -f Advanced_Java_Assignment_5/App%201/pom.xml sonar:sonar'
+                 }
+           }
+         }
+     }
+}
+    
